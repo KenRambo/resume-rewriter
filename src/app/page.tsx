@@ -172,7 +172,7 @@ export default function Home() {
 
           <div className="space-y-4">
             <Label className="text-lg">Your Personality</Label>
-            {Object.entries(personalityLabels).map(([key, [left, right]]) => (
+            {{(Object.keys(personalityLabels) as Array<keyof typeof personality>).map((key) => (
               <div key={key}>
                 <Label className="flex justify-between">
                   <span>{left}</span>
