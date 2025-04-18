@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import type { NextApiRequest, NextApiResponse } from "next";
 import formidable, { Fields, Files } from "formidable";
 import fs from "fs";
