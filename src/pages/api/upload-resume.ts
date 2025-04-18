@@ -14,7 +14,7 @@ export const config = {
 function parseForm(
   req: NextApiRequest,
 ): Promise<{ fields: Fields; files: Files }> {
-  const form = formidable({
+  const form = new formidable.IncomingForm({
     keepExtensions: true,
     maxFileSize: 10 * 1024 * 1024,
   });
