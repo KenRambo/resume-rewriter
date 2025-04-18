@@ -123,13 +123,12 @@ export default function Home() {
     const data = await res.json();
     if (data?.text) {
       setResumeText(data.text);
-      await rewriteResume(data.text); // auto-trigger rewrite
+      await rewriteResume(data.text);
     }
 
     setUploading(false);
   };
 
-  // 👇 Load from share link
   useEffect(() => {
     const url = new URL(window.location.href);
     const sharedRewrite = url.searchParams.get("rewrite");
@@ -172,52 +171,62 @@ export default function Home() {
 
           <div className="space-y-4">
             <Label className="text-lg">Your Personality</Label>
-            {{(Object.keys(personalityLabels) as Array<keyof typeof personality>).map((key) => (
-              <div key={key}>
-                <Label className="flex justify-between">
-                  <span>{left}</span>
-                  <span>{right}</span>
-                </Label>
-                <input
-                  type="range"
-                  min={0}
-                  max={1}
-                  step={0.1}
-                  value={personality[key as keyof typeof personality]}
-                  onChange={(e) =>
-                    handleSliderChange(
-                      setPersonality,
-                      key,
-                      Number(e.target.value),
-                    )
-                  }
-                  className="w-full"
-                />
-              </div>
-            ))}
+            {(
+              Object.keys(personalityLabels) as Array<keyof typeof personality>
+            ).map((key) => {
+              const [left, right] = personalityLabels[key];
+              return (
+                <div key={key}>
+                  <Label className="flex justify-between">
+                    <span>{left}</span>
+                    <span>{right}</span>
+                  </Label>
+                  <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.1}
+                    value={personality[key]}
+                    onChange={(e) =>
+                      handleSliderChange(
+                        setPersonality,
+                        key,
+                        Number(e.target.value),
+                      )
+                    }
+                    className="w-full"
+                  />
+                </div>
+              );
+            })}
           </div>
 
           <div className="space-y-4 pt-4">
             <Label className="text-lg">Narrative Tone</Label>
-            {Object.entries(toneLabels).map(([key, [left, right]]) => (
-              <div key={key}>
-                <Label className="flex justify-between">
-                  <span>{left}</span>
-                  <span>{right}</span>
-                </Label>
-                <input
-                  type="range"
-                  min={0}
-                  max={1}
-                  step={0.1}
-                  value={tone[key as keyof typeof tone]}
-                  onChange={(e) =>
-                    handleSliderChange(setTone, key, Number(e.target.value))
-                  }
-                  className="w-full"
-                />
-              </div>
-            ))}
+            {(Object.keys(toneLabels) as Array<keyof typeof tone>).map(
+              (key) => {
+                const [left, right] = toneLabels[key];
+                return (
+                  <div key={key}>
+                    <Label className="flex justify-between">
+                      <span>{left}</span>
+                      <span>{right}</span>
+                    </Label>
+                    <input
+                      type="range"
+                      min={0}
+                      max={1}
+                      step={0.1}
+                      value={tone[key]}
+                      onChange={(e) =>
+                        handleSliderChange(setTone, key, Number(e.target.value))
+                      }
+                      className="w-full"
+                    />
+                  </div>
+                );
+              },
+            )}
           </div>
 
           <div className="flex gap-2 pt-4">
