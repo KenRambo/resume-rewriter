@@ -1,9 +1,6 @@
-/* eslint-disable */
-
 import type { NextApiRequest, NextApiResponse } from "next";
 import IncomingForm from "formidable";
 import type { Fields, Files } from "formidable";
-
 import fs from "fs";
 import path from "path";
 import { extractPdfText } from "@/lib/extractPdfText";
@@ -17,18 +14,15 @@ export const config = {
 function parseForm(
   req: NextApiRequest,
 ): Promise<{ fields: Fields; files: Files }> {
-  const form = new formidable.IncomingForm({
+  const form = new IncomingForm({
     keepExtensions: true,
     maxFileSize: 10 * 1024 * 1024,
   });
 
   return new Promise((resolve, reject) => {
     form.parse(req, (err, fields, files) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve({ fields, files });
-      }
+      if (err) reject(err);
+      else resolve({ fields, files });
     });
   });
 }
@@ -58,7 +52,7 @@ export default async function handler(
     const buffer = fs.readFileSync(pdfFile.filepath);
     console.log("[upload-resume] Buffer length:", buffer.length);
 
-    // Optional: Save a debug copy
+    // Optional: Save debug copy
     const debugPath = path.join("/tmp", "debug-upload.pdf");
     fs.writeFileSync(debugPath, buffer);
     console.log("[upload-resume] Saved debug copy to:", debugPath);
