@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const trimmedResume = resume.length > 4000 ? resume.slice(0, 4000) : resume;
+    const trimmedResume = resume.slice(0, 3000);
 
     const interpretSlider = (
       val: number,
@@ -79,6 +79,7 @@ Return only the 3 acts. Use first-person voice. Reference specific companies, ti
       model: "gpt-4-turbo",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
+      max_tokens: 800,
     });
     const duration = Date.now() - start;
     console.log(`[rewrite] GPT completed in ${duration}ms`);
