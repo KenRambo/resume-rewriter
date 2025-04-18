@@ -76,7 +76,7 @@ Return only the 3 acts. Use first-person voice. Reference specific companies, ti
 
     const start = Date.now();
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4-turbo",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     });
