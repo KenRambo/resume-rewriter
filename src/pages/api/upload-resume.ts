@@ -1,7 +1,9 @@
 /* eslint-disable */
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import formidable, { Fields, Files } from "formidable";
+import IncomingForm from "formidable";
+import type { Fields, Files } from "formidable";
+
 import fs from "fs";
 import path from "path";
 import { extractPdfText } from "@/lib/extractPdfText";
