@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import formidable, { Fields, Files } from "formidable";
+import { IncomingForm, Fields, Files } from "formidable";
 import fs from "fs";
 import path from "path";
 import { extractPdfText } from "@/lib/extractPdfText";
@@ -14,7 +14,7 @@ export const config = {
 function parseForm(
   req: NextApiRequest,
 ): Promise<{ fields: Fields; files: Files }> {
-  const form = new formidable.IncomingForm({
+  const form = new IncomingForm({
     keepExtensions: true,
     maxFileSize: 10 * 1024 * 1024,
   });
