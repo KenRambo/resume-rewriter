@@ -72,16 +72,16 @@ export default function Home() {
     professionalism: ["Professional", "Playful"],
   };
 
-  const handleSliderChange = (
-    setter: React.Dispatch<React.SetStateAction<Record<string, number>>>,
-    key: string,
+  function handleSliderChange<T extends Record<string, number>>(
+    setter: React.Dispatch<React.SetStateAction<T>>,
+    key: keyof T,
     value: number,
-  ) => {
+  ) {
     setter((prev) => ({
       ...prev,
       [key]: value,
     }));
-  };
+  }
 
   const rewriteResume = async (textOverride?: string) => {
     const textToUse = textOverride || resumeText;
