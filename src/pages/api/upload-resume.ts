@@ -1,6 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import IncomingForm from "formidable";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const formidable = require("formidable");
 import type { Fields, Files } from "formidable";
+import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import path from "path";
 import { extractPdfText } from "@/lib/extractPdfText";
@@ -14,7 +15,7 @@ export const config = {
 function parseForm(
   req: NextApiRequest,
 ): Promise<{ fields: Fields; files: Files }> {
-  const form = new IncomingForm({
+  const form = new formidable.IncomingForm({
     keepExtensions: true,
     maxFileSize: 10 * 1024 * 1024,
   });
@@ -47,18 +48,11 @@ export default async function handler(
       return;
     }
 
-    console.log("[upload-resume] Uploaded file path:", pdfFile.filepath);
-
     const buffer = fs.readFileSync(pdfFile.filepath);
-    console.log("[upload-resume] Buffer length:", buffer.length);
-
-    // Optional: Save debug copy
     const debugPath = path.join("/tmp", "debug-upload.pdf");
     fs.writeFileSync(debugPath, buffer);
-    console.log("[upload-resume] Saved debug copy to:", debugPath);
 
     const text = await extractPdfText(buffer);
-    console.log("[upload-resume] Extracted text length:", text.length);
 
     res.status(200).json({ text });
   } catch (err: unknown) {
