@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import formidable, { File } from "formidable";
+import formidable, { Fields, Files } from "formidable";
 import fs from "fs";
 import path from "path";
 import { extractPdfText } from "@/lib/extractPdfText";
@@ -17,7 +17,7 @@ function parseForm(req: NextApiRequest): Promise<{ fields: any; files: any }> {
   });
 
   return new Promise((resolve, reject) => {
-    form.parse(req, (err, fields, files) => {
+    form.parse(req, (err: Error | null, fields: formidable.Fields, files: formidable.Files) => {
       if (err) reject(err);
       else resolve({ fields, files });
     });
@@ -58,11 +58,11 @@ export default async function handler(
     console.log("[upload-resume] Extracted text length:", text.length);
 
     res.status(200).json({ text });
-  } catch (err: any) {
-    console.error("[upload-resume] Extraction failed:", err);
-    res.status(500).json({
-      error: "Text extraction failed",
-      detail: err.message || "Unknown error",
-    });
+  } .catch((err: unknown) => {
+  if (err instanceof Error) {
+    reject(err);
+  } else {
+    reject(new Error("Unknown parsing error"));
   }
+});
 }

@@ -72,8 +72,12 @@ export default function Home() {
     professionalism: ["Professional", "Playful"],
   };
 
-  const handleSliderChange = (setter: Function, key: string, value: number) => {
-    setter((prev: any) => ({
+  const handleSliderChange = (
+    setter: React.Dispatch<React.SetStateAction<Record<string, number>>>,
+    key: string,
+    value: number,
+  ) => {
+    setter((prev) => ({
       ...prev,
       [key]: value,
     }));
