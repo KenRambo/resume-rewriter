@@ -58,6 +58,9 @@ export default function Home() {
     professionalism: 0.5,
   });
 
+  const [movieMode, setMovieMode] = useState(false);
+  const [genre, setGenre] = useState("classic drama");
+
   const personalityLabels = {
     introverted: ["Introverted", "Extroverted"],
     cautious: ["Cautious", "Bold"],
@@ -98,8 +101,15 @@ export default function Home() {
         resume: textToUse,
         personality,
         tone,
+        movieMode,
+        genre,
       }),
     });
+
+    if (!response.ok) {
+      const fallback = await response.text();
+      throw new Error(`Rewrite failed: ${response.status} – ${fallback}`);
+    }
 
     const data = await response.json();
     setRewrittenText(data.result);
@@ -226,6 +236,37 @@ export default function Home() {
                   </div>
                 );
               },
+            )}
+          </div>
+
+          <div className="space-y-2 pt-4">
+            <Label className="text-lg">🎬 Movie Mode</Label>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={movieMode}
+                onChange={(e) => setMovieMode(e.target.checked)}
+              />
+              <span>Rewrite as a movie script</span>
+            </div>
+            {movieMode && (
+              <div>
+                <Label htmlFor="genre">Choose a Genre</Label>
+                <select
+                  id="genre"
+                  value={genre}
+                  onChange={(e) => setGenre(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md px-2 py-1"
+                >
+                  <option value="classic drama">Classic Drama</option>
+                  <option value="sci-fi">Sci-Fi</option>
+                  <option value="spy thriller">Spy Thriller</option>
+                  <option value="coming-of-age">Coming-of-Age</option>
+                  <option value="superhero">Superhero</option>
+                  <option value="romantic comedy">Romantic Comedy</option>
+                  <option value="fantasy adventure">Fantasy Adventure</option>
+                </select>
+              </div>
             )}
           </div>
 

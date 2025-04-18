@@ -8,7 +8,7 @@ const openai = new OpenAI({
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { resume, personality, tone } = body;
+    const { resume, personality, tone, movieMode, genre } = body;
 
     if (!resume || typeof resume !== "string") {
       return NextResponse.json(
@@ -45,6 +45,10 @@ Narrative Style Preferences:
 - Professionalism: ${interpretSlider(tone.professionalism, "Professional", "Playful")}
 `;
 
+    const moviePrompt = movieMode
+      ? `\nStyle this narrative to fit the tone and tropes of a ${genre || "classic drama"} movie. Use evocative language and structure to mirror the pacing and emotion of that genre.`
+      : "";
+
     const prompt = `
 You are a professional career storyteller. Your task is to rewrite a resume into a compelling first-person 3-act career narrative.
 
@@ -67,6 +71,7 @@ ${toneSummary}
 
 Personality reference (use for depth, not imitation):
 ${personalitySummary}
+${moviePrompt}
 
 Resume Data:
 =====
